@@ -1,2 +1,3 @@
 # Web_parsing
-Web parsing 
+
+1. weblancer-parser.py  --  парсинг биржы фриланса weblancer.net + сохранение в csv файл
