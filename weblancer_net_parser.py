@@ -53,7 +53,7 @@ def main():
             projects.extend(result)
             counter += 1
     print(f'Done in {time.time()-start} sec.')
-    save(projects, 'weblancer-projects.csv')
+    save(projects, 'weblancer_net.csv')
     
 if __name__ == '__main__':
     main()
