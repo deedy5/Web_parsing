@@ -3,6 +3,6 @@
 Многопоточные парсеры сайтов с сохранением в файл с расширением csv
 
 
-ua_football_com-parser.py   --  парсинг сайта спортивных новостей ua-football.com
+ua_football_com-parser.py   --  https//:www.ua-football.com/sport
 
-weblancer_net-parser.py  --  парсинг биржы фриланса weblancer.net
+weblancer_net-parser.py     --  https://www.weblancer.net/jobs
