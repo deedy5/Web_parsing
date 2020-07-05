@@ -1,6 +1,6 @@
 # Web_parsing
 
-Многопоточные парсеры сайтов с сохранением в файл с расширением csv
+Многопоточные парсеры сайтов с сохранением в csv
 
 
 ap_russia-parser.py         --  https://apnews.com/Russia
