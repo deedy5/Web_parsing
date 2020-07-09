@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 def get_html(url):
     response = urllib.request.urlopen(url)
+    time.sleep(1)
     return response.read()
 
 def get_page_count(url):
