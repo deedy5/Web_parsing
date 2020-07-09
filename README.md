@@ -1,7 +1,3 @@
-# Web_parsing
-
-Многопоточные парсеры сайтов с сохранением в csv
-
 abcnews_parsing.py          --  https://abcnews.go.com/international  ->  abcnews.csv
 
 ap_russia-parser.py         --  https://apnews.com/Russia             ->  ap_russia.csv
