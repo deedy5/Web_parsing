@@ -16,6 +16,7 @@ def get_last_page(url):
 
 def parse(url):
     html = get_html(url)
+    time.sleep(1)
     soup = BeautifulSoup(html, 'lxml')
     news = soup.find_all('li', class_="liga-news-item")
     results = []
@@ -43,7 +44,7 @@ def main():
     pages_gen = (f'{URL}?page={page}' for page in range(pages))
     results = []
     counter = 1
-    with ThreadPoolExecutor() as executor:
+    with ThreadPoolExecutor(3) as executor:
         for result in executor.map(parse, pages_gen):
             print(f"Progress {counter}/{pages}")
             results.extend(result)
