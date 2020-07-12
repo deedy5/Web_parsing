@@ -9,7 +9,7 @@ from stem.control import Controller
 
 def tor_new_ip():
     with Controller.from_port(port = 9051) as controller:
-        controller.authenticate(password="TorTor123_")
+        controller.authenticate(password="Password(not hashed)")
         controller.signal(Signal.NEWNYM)
 
 def get_html(url, headers = None, proxies = None):
@@ -87,7 +87,7 @@ def main():
                     author text, tags text, rating integer, views integer, comments integer, url text)''')
     with ThreadPoolExecutor() as executor:
         with conn:
-            url_gen = (f'https://m.habr.com/ru/p/{i}' for i in range(27120, 30000))
+            url_gen = (f'https://m.habr.com/ru/p/{i}' for i in range(min, max))
             counter = 1
             t0 = time.monotonic()
             for result in executor.map(parse_habr, url_gen):            
@@ -102,5 +102,6 @@ def main():
         conn.close()
 
 if __name__ == '__main__':
+    min, max = 1, 1000
     main()
 
