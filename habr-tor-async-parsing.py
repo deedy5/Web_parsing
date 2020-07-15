@@ -8,10 +8,9 @@ import lxml.html
 from stem import Signal
 from stem.control import Controller
 
-
 async def tor_new_ip():
     with Controller.from_port(port = 9051) as controller:
-        controller.authenticate(password="Password(not hashed)")
+        controller.authenticate(password="Password(not hashed")
         controller.signal(Signal.NEWNYM)
         ip_api_list = ['https://api.my-ip.io/ip', 'https://api.ipify.org', 'https://api.ip.sb/ip',]
         ip = await fetch(choice(ip_api_list))
@@ -32,22 +31,20 @@ async def fetch(url):
                 print(response.status, response.url)
                 if response.status == 200:
                     r = await response.text()                    
-                elif response.status == 403:
-                    r = 403
-                elif response.status == 404:
-                    r = 404
+                else:
+                    r = response.status
                 await connector.close()
                 return r
         except:
+            await tor_new_ip()
+            await asyncio.sleep(4)
             continue    
     return 'Error'
 
 async def parse_habr(url):
     page = await fetch(url)
-    if page == 403:
-        return ('403', '403', '403', '403', '403', 403, 403, 403, url)
-    if page == 404:
-        return ('404', '404', '404', '404', '404', 404, 404, 404, url)
+    if page == 403 or page == 404:
+        return (page, page, page, page, page, page, page, page, url)    
     if page == 'Error':
         return ('Error', 'Error', 'Error', 'Error', 'Error', 0, 0, 0, url)
     root = lxml.html.fromstring(page)
@@ -70,14 +67,12 @@ async def parse_habr(url):
         comments = root.xpath('/html/body/div[2]/div/div[3]/main/div/div[1]/div/div[3]/a/div/text()')[0].split()[1]        
     except:
         comments = 0        
-    return ((timestamp, title, text, author, tags, int(rating), int(views), int(comments), url))
+    return ((timestamp, title, text, author, tags, rating, views, comments, url))
 
 def save_sqlite(results):
-    sqlite3.threadsafety = 3
     conn = sqlite3.connect('habr.sqlite3', check_same_thread = False)
     with conn:
-        conn.execute('PRAGMA journal_mode = wal')
-        conn.execute('PRAGMA synchronous = 1')
+        conn.executescript('PRAGMA journal_mode = wal; PRAGMA synchronous = 1;')
         conn.execute('''create table if not exists habr(id integer primary key, timestamp text, title text, text text,
                         author text, tags text, rating integer, views integer, comments integer, url text)''')
         conn.executemany('''insert into habr (timestamp, title, text, author, tags, rating, views,
@@ -87,19 +82,13 @@ def save_sqlite(results):
 
 async def main():
     start, step = 1, 10
-    while True:
-        tasks = []
-        for i in range(step):
-            url = f'https://m.habr.com/ru/p/{start + i}'
-            task = asyncio.create_task(parse_habr(url))
-            tasks.append(task)                    
+    while start < 100:
+        tasks = [asyncio.create_task(parse_habr(f'https://m.habr.com/ru/p/{start+i}')) for i in range(step)]
         await asyncio.gather(*tasks)
         await tor_new_ip()
-        results = [task.result() for task in tasks]
-        save_sqlite(results)
+        save_sqlite([task.result() for task in tasks])
         start += step
         time.sleep(3)
-    
 
 if __name__ == '__main__':    
     asyncio.run(main())
