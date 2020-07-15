@@ -1,10 +1,10 @@
 import sqlite3
 import time
 from random import choice
+import lxml.html
 import asyncio
 import aiohttp
 from aiohttp_socks import ProxyConnector
-import lxml.html
 from stem import Signal
 from stem.control import Controller
 
