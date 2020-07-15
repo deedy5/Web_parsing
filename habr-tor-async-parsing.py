@@ -89,11 +89,9 @@ async def main():
     start, step = 1, 10
     while True:
         tasks = []
-        counter = 1
         for i in range(step):
             url = f'https://m.habr.com/ru/p/{start + i}'
             task = asyncio.create_task(parse_habr(url))
-            await asyncio.sleep(1)
             tasks.append(task)                    
         await asyncio.gather(*tasks)
         await tor_new_ip()
